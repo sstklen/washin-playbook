@@ -1,0 +1,44 @@
+{
+  "name": "washin-claude-skills",
+  "version": "1.0.0",
+  "description": "112 battle-tested Claude Code skills for production web dev. Every bug fix that cost hours — so it won't cost you.",
+  "bin": {
+    "washin-claude-skills": "./cli.js"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "skills",
+    "ai",
+    "ai-coding",
+    "production",
+    "debug",
+    "mcp",
+    "anthropic",
+    "bun",
+    "hono",
+    "docker",
+    "devops",
+    "coding-assistant"
+  ],
+  "author": "tkman <sstklen@users.noreply.github.com> (https://github.com/sstklen)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sstklen/washin-claude-skills.git"
+  },
+  "homepage": "https://github.com/sstklen/washin-claude-skills",
+  "bugs": {
+    "url": "https://github.com/sstklen/washin-claude-skills/issues"
+  },
+  "files": [
+    "cli.js",
+    "install.sh",
+    "skills/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

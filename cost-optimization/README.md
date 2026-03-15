@@ -1,0 +1,254 @@
+# 💰 Claude API Cost Optimization Skill
+
+[![GitHub stars](https://img.shields.io/github/stars/sstklen/claude-api-cost-optimization?style=social)](https://github.com/sstklen/claude-api-cost-optimization)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://claude.ai/code)
+
+> **Save 50-90% on Claude API costs** with real production data & techniques
+
+## 🔥 Key Discoveries (What Official Docs Don't Tell You)
+
+| Discovery | Details |
+|-----------|---------|
+| **Bigger batches = Faster** | 294 requests finished before 10 requests! |
+| **22x efficiency gap** | Large batch: 0.45 min/req vs Small: 9.84 min/req |
+| **Not FIFO** | Anthropic prioritizes bigger batches |
+| **Image cache = only 14%** | Not 90%! (Images can't be cached, only text prompts) |
+
+### TL;DR
+
+```
+Want to save money? → Batch 100+ requests together
+Want to save time?  → Also batch 100+ (they finish first!)
+Working with images? → Batch API is enough (cache doesn't help much)
+Working with text?   → Use both Batch + Cache (up to 95% savings)
+```
+
+## ⚡ Quick Start
+
+```bash
+# Install the skill
+cp claude-api-cost-optimization.skill.md ~/.claude/skills/
+
+# Calculate your potential savings
+python scripts/calculate_savings.py --input 10000 --output 5000 --requests 100
+```
+
+## 💰 Three Techniques, Massive Savings
+
+| Technique | Savings | Best For | Docs |
+|-----------|---------|----------|------|
+| **Batch API** | 50% off | Non-urgent bulk tasks | [Reference](references/batch-api.md) |
+| **Prompt Caching** | 90% off | Repeated system prompts | [Reference](references/prompt-caching.md) |
+| **Extended Thinking** | ~80% off | Complex reasoning | [Reference](references/extended-thinking.md) |
+
+## 📊 Proof: Real Billing Data
+
+### 🎬 Latest: Jelly 294-Video GAIA Tagging (2026-02-02)
+
+> **From**: [Washin Village](https://washinmura.jp) - Animal sanctuary in Boso Peninsula, Japan
+
+**Mission**: AI behavior tagging for 294 daily videos of 28 rescue cats & dogs
+
+| Metric | Value |
+|--------|-------|
+| Batches | 2 × 283 requests = **100% success** |
+| Cost | **$5.32** vs Standard API: **$714.86** |
+| Savings | **99.3%** ($709.54 saved) |
+| Time | Completed within 24 hours (fully automated) |
+
+**Key Strategy**:
+```python
+Batch API (50% discount)
+  + Prompt Caching (90% discount)
+  + Structured JSON output
+  = From $714.86 → $5.32
+```
+
+**Technical Highlights**:
+1. ✅ Unified 3,500-token system prompt (annotation guidelines)
+2. ✅ Near 100% cache hit rate (283× reuse)
+3. ✅ Split batching strategy (avoid single large batch)
+4. ✅ JSON structured output (reduce output tokens)
+
+**Cost Breakdown**:
+- Input: $0.51 + Cache: $0.39 = $0.90 (16.9%)
+- Output: $4.42 (83.1%)
+
+**Key Finding**: Even with extreme input optimization via caching, **output tokens still dominate costs**. Next optimization: reduce AI response length with structured JSON.
+
+👉 **Full case study:** [examples/jelly-294-gaia-tagging-batch.md](examples/jelly-294-gaia-tagging-batch.md)
+
+---
+
+### 🔥 Previous: 294 Video Batch Job (2026-01-28)
+
+| Item | Value |
+|------|-------|
+| Files Processed | 294 |
+| Total Tokens | 1,500,944 |
+| Original Cost | $11.04 |
+| **Batch Cost** | **$5.52** |
+| **💰 Savings** | **$5.52 (50%)** |
+| Per Request | $0.0188 |
+
+#### Token Breakdown (From Anthropic Console)
+| Token Type | Count | Cost |
+|------------|-------|------|
+| Input (no cache) | 365,624 | $0.55 |
+| Cache write (1h) | 106,920 | $0.32 |
+| Cache read | 416,988 | $0.06 |
+| Output | 611,412 | $4.59 |
+
+### 🔥 Surprising Discovery: Bigger = Faster AND Cheaper!
+
+| Batch | Requests | Sent | Done | Per Request |
+|-------|----------|------|------|-------------|
+| 🐘 Large | 294 | 10:22 | 12:35 | **0.45 min** |
+| 🐰 Small | 10 | 11:50 | 13:28 | 9.84 min |
+| 🐁 Test | 3 | 01:20 | 02:23 | 20.77 min |
+
+**Key findings:**
+- ✅ Large batch finished **53 minutes before** small batch (even though sent 1.5h earlier)
+- ✅ Large batch is **22x more efficient** per request!
+- ✅ Anthropic does NOT process in order (FIFO) — bigger batches get priority
+
+### 💡 Why? (Simple Explanation)
+
+```
+Think of GPU like an oven:
+🔥 Preheat = 15 min (fixed cost)
+
+Large (294): Preheat → Bake all 294 → 0.45 min each ✅
+Small (10):  Preheat → Bake only 10 → 9.84 min each ❌
+
+The more you bake, the cheaper per item!
+```
+
+👉 **Full case study:** [examples/batch-294-videos-case-study.md](examples/batch-294-videos-case-study.md)
+
+### Anthropic Console CSV Export (2026-01-27)
+
+| Usage Type | Input Tokens | Cache Read | Output | Savings Applied |
+|------------|--------------|------------|--------|-----------------|
+| Sonnet (standard) | 79,224 | **39,204** ✅ | 71,608 | Caching working! |
+| Sonnet (batch) | 3,612 | **3,564** ✅ | 6,016 | Batch + Cache! |
+
+👉 **Full analysis:** [examples/billing-data-analysis.md](examples/billing-data-analysis.md)
+
+### Real-World Results (294 Videos)
+
+| Optimization | Cost/Video | Total | Savings |
+|--------------|------------|-------|---------|
+| None | $0.038 | $11.14 | — |
+| + Caching | $0.033 | $9.62 | 14% |
+| + Batch | $0.019 | $5.57 | 50% |
+| **+ Both** | **$0.016** | **$4.79** | **57%** 🔥 |
+
+👉 **Full report:** [examples/GAIA-savings-report.md](examples/GAIA-savings-report.md)
+
+## 🔧 Code Examples
+
+### Prompt Caching (90% off repeated prompts)
+
+```python
+response = client.messages.create(
+    model="claude-sonnet-4-5",
+    system=[{
+        "type": "text",
+        "text": "Your long system prompt (>1024 tokens)...",
+        "cache_control": {"type": "ephemeral"}  # ← This saves 90%!
+    }],
+    messages=[{"role": "user", "content": "Hello"}]
+)
+```
+
+### Batch API (50% off everything)
+
+```python
+batch = client.messages.batches.create(
+    requests=[
+        {
+            "custom_id": "task-001",
+            "params": {
+                "model": "claude-sonnet-4-5",
+                "max_tokens": 1024,
+                "messages": [{"role": "user", "content": "Translate..."}]
+            }
+        }
+        # Add up to 100,000 requests!
+    ]
+)
+```
+
+👉 **Full scripts:** [scripts/](scripts/)
+
+## 💡 Key Insight: Image Workloads
+
+> **Why only 14% caching savings instead of 90%?**
+
+In image tasks, images = ~85% of tokens. Only the system prompt (~15%) is cacheable.
+
+```
+Input Composition:
+├── System Prompt: ~15% → ✅ Cacheable (90% off)
+└── Image Data:    ~85% → ❌ Cannot cache
+
+Actual Savings: 15% × 90% = ~14%
+```
+
+**This is NOT in the official docs — we learned it the hard way!**
+
+---
+
+## 📁 Repository Structure
+
+```
+├── claude-api-cost-optimization.skill.md  # ← Install this!
+│
+├── examples/                    # Real evidence
+│   ├── billing-data-analysis.md # Anthropic Console CSV
+│   ├── real-batch-results.md    # Actual API response
+│   └── GAIA-savings-report.md   # 294 video case study
+│
+├── scripts/                     # Ready-to-run code
+│   ├── batch_example.py
+│   ├── cache_example.py
+│   └── calculate_savings.py
+│
+└── references/                  # Quick cheatsheets
+    ├── batch-api.md
+    ├── prompt-caching.md
+    └── extended-thinking.md
+```
+
+## 📊 Pricing Reference (2026)
+
+| Model | Input | Output | Batch Input | Batch Output |
+|-------|-------|--------|-------------|--------------|
+| Opus 4.5 | $5/MTok | $25/MTok | $2.50/MTok | $12.50/MTok |
+| Sonnet 4.5 | $3/MTok | $15/MTok | $1.50/MTok | $7.50/MTok |
+| Haiku 4.5 | $1/MTok | $5/MTok | $0.50/MTok | $2.50/MTok |
+
+| Cache Type | Price | vs Normal |
+|------------|-------|-----------|
+| Cache write | $3.75/MTok | +25% (first time) |
+| **Cache read** | **$0.30/MTok** | **-90%** ✅ |
+
+## 🔗 Official Docs
+
+- [Prompt Caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)
+- [Batch Processing](https://docs.anthropic.com/en/docs/build-with-claude/batch-processing)
+- [Extended Thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)
+
+---
+
+## 🐾 The Story (Optional Reading)
+
+This skill was born from **[Washin Village](https://washinmura.jp)** — home of 28 cats & dogs in Japan. While building our AI pet recognition system, API bills added up quickly. We researched every cost-saving technique and compiled them here.
+
+> Full story: [STORY.md](STORY.md)
+
+---
+
+*Made with 💰 by Washin Village — Save money, make more content!*
